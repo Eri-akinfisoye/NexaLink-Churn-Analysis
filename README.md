@@ -145,7 +145,7 @@ NexaLink-Churn-Analysis/
 
 ## Author
 
-**Your Name** — Data Analyst
+**Akinfisoye Erioluwa** — Data Analyst
 
 [LinkedIn](https://linkedin.com/in/your-profile) | [GitHub](https://github.com/your-username)
 
