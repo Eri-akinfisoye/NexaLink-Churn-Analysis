@@ -4,7 +4,7 @@ An end-to-end data analytics project investigating customer attrition patterns, 
 
 ---
 
-![Dashboard Overview](assets/screenshots/Overview.png)
+![Dashboard Overview](Assets/Screenshots/Services.png)
 *<!-- Hero image — Replace with your best overview page screenshot (full width). Upload to assets/screenshots/01_overview.png -->*
 
 ---
@@ -68,32 +68,32 @@ Star schema with one fact table and four dimension tables, all joined on `Custom
 
 ### Overview
 
-![Overview Page](assets/screenshots/01_overview.png)
+![Overview Page](Assets/Screenshots/Overview.png)
 *<!-- Upload to assets/screenshots/01_overview.png -->*
 
 ### Demographics
 
-![Demographics Page](assets/screenshots/02_demographics.png)
+![Demographics Page](Assets/Screenshots/Demographics.png)
 *<!-- Upload to assets/screenshots/02_demographics.png -->*
 
 ### Tenure & Loyalty
 
-![Tenure & Loyalty Page](assets/screenshots/03_tenure.png)
+![Tenure & Loyalty Page](Assets/Screenshots/Tenure.png)
 *<!-- Upload to assets/screenshots/03_tenure.png -->*
 
 ### Services & Add-ons
 
-![Services & Add-ons Page](assets/screenshots/04_services.png)
+![Services & Add-ons Page](Assets/Screenshots/Services.png)
 *<!-- Upload to assets/screenshots/04_services.png -->*
 
 ### Contract & Billing
 
-![Contract & Billing Page](assets/screenshots/05_contract_billing.png)
+![Contract & Billing Page](Assets/Screenshots/Contract&Billing.png)
 *<!-- Upload to assets/screenshots/05_contract_billing.png -->*
 
 ### Charges & Revenue
 
-![Charges & Revenue Page](assets/screenshots/06_charges_revenue.png)
+![Charges & Revenue Page](assets/screenshots/Chargesandrevenue.png)
 *<!-- Upload to assets/screenshots/06_charges_revenue.png -->*
 
 ---
