@@ -4,7 +4,7 @@ An end-to-end data analytics project investigating customer attrition patterns, 
 
 ---
 
-![Dashboard Overview](assets/screenshots/01_overview.png)
+![Dashboard Overview](assets/screenshots/Overview.png)
 *<!-- Hero image — Replace with your best overview page screenshot (full width). Upload to assets/screenshots/01_overview.png -->*
 
 ---
