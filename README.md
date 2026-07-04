@@ -1,6 +1,6 @@
 # NexaLink Telecom — Customer Churn Analysis
 
-An end-to-end data analytics project investigating customer attrition patterns, revenue impact, and retention strategy for a fictional telecommunications company.
+An end-to-end data analytics project investigating customer attrition patterns, revenue impact, and retention strategy for a telecommunications company.
 
 ---
 
