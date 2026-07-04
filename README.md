@@ -39,7 +39,7 @@ Star schema with one fact table and four dimension tables, all joined on `Custom
 | `dim_services` | Dimension | Customer_ID, Internet_Service_Type, Add-on subscriptions |
 | `dim_support` | Dimension | Customer_ID, Admin_Tickets_Count, Tech_Tickets_Count |
 
-![Data Model](assets/screenshots/07_data_model.png)
+![Data Model](Assets/Screenshots/image.png)
 *<!-- Data model diagram — Add a screenshot of the Power BI model view showing the star schema. Upload to assets/screenshots/07_data_model.png -->*
 
 ---
@@ -93,7 +93,7 @@ Star schema with one fact table and four dimension tables, all joined on `Custom
 
 ### Charges & Revenue
 
-![Charges & Revenue Page](assets/screenshots/Charges&revenue.png)
+![Charges & Revenue Page](Assets/Screenshots/Charges&revenue.png)
 *<!-- Upload to assets/screenshots/06_charges_revenue.png -->*
 
 ---
