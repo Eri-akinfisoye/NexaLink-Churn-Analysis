@@ -93,7 +93,7 @@ Star schema with one fact table and four dimension tables, all joined on `Custom
 
 ### Charges & Revenue
 
-![Charges & Revenue Page](Assets/Screenshots/Charges&revenue.png)
+![Charges & Revenue Page](Assets/Screenshots/Charges&Revenue.png)
 *<!-- Upload to assets/screenshots/06_charges_revenue.png -->*
 
 ---
