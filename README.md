@@ -11,7 +11,7 @@ An end-to-end data analytics project investigating customer attrition patterns, 
 
 ## Project Overview
 
-NexaLink is a fictional telecommunications provider offering internet, phone, and streaming services to residential customers. The company faces a critical churn problem: **26.5% of its customer base (1,869 of 7,043 customers) has churned**, representing an estimated **$1.67 million in annualised revenue loss** — equivalent to **30.5% of total monthly revenue**.
+NexaLink is a telecommunications provider offering internet, phone, and streaming services to residential customers. The company faces a critical churn problem: **26.5% of its customer base (1,869 of 7,043 customers) has churned**, representing an estimated **$1.67 million in annualised revenue loss** — equivalent to **30.5% of total monthly revenue**.
 
 This project investigates the root drivers of churn across seven analytical dimensions, quantifies the financial impact of each segment, and delivers a prioritised retention strategy with ROI projections. The analysis follows a structured framework: **Observation → Insight → Impact → Recommendation**.
 
@@ -147,6 +147,6 @@ NexaLink-Churn-Analysis/
 
 **Akinfisoye Erioluwa** — Data Analyst
 
-[LinkedIn](https://linkedin.com/in/your-profile) | [GitHub](https://github.com/your-username)
+[LinkedIn](https://www.linkedin.com/in/erioluwa-akinfisoye-30533a247/) | [GitHub](https://github.com/Eri-akinfisoye)
 
-Specialising in customer analytics, churn analysis, and data-driven retention strategy using Power BI and Python.
+Specialising in customer analytics, churn analysis, and data-driven retention strategy using Power BI, Excel, and SQL
