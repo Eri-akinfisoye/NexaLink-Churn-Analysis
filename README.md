@@ -102,30 +102,30 @@ Star schema with one fact table and four dimension tables, all joined on `Custom
 
 ```
 NexaLink-Churn-Analysis/
-├── NexaLink Project.SemanticModel/   # TMDL data model
-│   └── definition/
-│       ├── database.tmdl             # Compatibility level 1601
-│       ├── model.tmdl                # Model definition, table refs
-│       ├── relationships.tmdl        # 4 bidirectional relationships
-│       ├── tables/                   # 9 table definitions (5 source + 4 measure)
-│       └── cultures/en-US.tmdl       # Model culture
-├── NexaLink Project.Report/          # PBIR report definition
-│   └── definition/
-│       ├── report.json               # Report metadata
-│       ├── pages/                    # 4 report pages with visuals
-│       └── bookmarks/                # 11 bookmarks
-├── assets/
-│   └── screenshots/                  # Dashboard images (add 8 PNGs here)
-│       ├── 01_overview.png
-│       ├── 02_demographics.png
-│       ├── 03_tenure.png
-│       ├── 04_services.png
-│       ├── 05_contract_billing.png
-│       ├── 06_charges_revenue.png
-│       └── 07_data_model.png
-├── NexaLink_Churn_Analysis_Report.md # Full written analysis (~1,200 lines)
-├── AGENTS.md                         # Project documentation for AI agent
-└── README.md                         # This file
+│
+├── README.md
+│
+├── data/
+│   ├── raw/
+│   │   └── Customer_Churn_Dataset.xlsx
+│   └── processed/
+│       └── NexaLink_Churn_PowerBI.xlsx
+│
+├── dashboard/
+│   └── NexaLink_Project.pbix
+│
+├── report/
+│   └── NexaLink_Churn_Analysis_Report.pdf
+│
+└── assets/
+└── screenshots/
+├── 01_overview.png
+├── 02_demographics.png
+├── 03_tenure.png
+├── 04_services.png
+├── 05_contract_billing.png
+├── 06_charges_revenue.png
+└── 07_data_model.png
 ```
 
 ---
