@@ -1,0 +1,208 @@
+table dim_billing
+	lineageTag: 6402c706-08a5-45c9-8451-1a68e12d2c01
+
+	column Customer_ID
+		dataType: string
+		lineageTag: f386f7cf-5016-4550-bfd1-5b293eb0e690
+		summarizeBy: none
+		sourceColumn: Customer_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Contract_Type
+		dataType: string
+		lineageTag: 0e3c3e23-8c72-46f5-9af9-794ee36951da
+		summarizeBy: none
+		sourceColumn: Contract_Type
+
+		annotation SummarizationSetBy = Automatic
+
+	column Uses_Paperless_Billing
+		dataType: int64
+		formatString: 0
+		lineageTag: b9703c45-c091-420b-9fb5-232150208748
+		summarizeBy: sum
+		sourceColumn: Uses_Paperless_Billing
+
+		annotation SummarizationSetBy = Automatic
+
+	column Payment_Method
+		dataType: string
+		lineageTag: a611e22f-0081-4636-b6dd-570b89a3bf78
+		summarizeBy: none
+		sourceColumn: Payment_Method
+
+		annotation SummarizationSetBy = Automatic
+
+	column Monthly_Charge_USD
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: e3a7f572-ec35-492f-87b4-616935a10350
+		summarizeBy: sum
+		sourceColumn: Monthly_Charge_USD
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+		annotation __PBI_SemanticLinks = [{"LinkTarget":{"TableName":"dim_billing","TableItemName":"Monthly_Charge_USD (bins)","ObjectType":4},"LinkType":"UsedInGroup"}]
+
+	column Total_Charge_USD
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: bf284fb3-569c-4b0b-844b-c74c4bf37bc0
+		summarizeBy: sum
+		sourceColumn: Total_Charge_USD
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column 'Monthly_Charge_USD (bins)' =
+			IF(
+				ISBLANK('dim_billing'[Monthly_Charge_USD]),
+				BLANK(),
+				INT('dim_billing'[Monthly_Charge_USD] / 20) * 20
+			)
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		lineageTag: cd063e06-989c-473a-8f43-8e7216a1f98b
+		summarizeBy: none
+
+		extendedProperty GroupingMetadata =
+				{
+				  "version": 0,
+				  "groupedColumns": [
+				    {
+				      "Column": {
+				        "Expression": {
+				          "SourceRef": {
+				            "Entity": "dim_billing"
+				          }
+				        },
+				        "Property": "Monthly_Charge_USD"
+				      }
+				    }
+				  ],
+				  "binningMetadata": {
+				    "binSize": {
+				      "value": 20.0,
+				      "unit": 0
+				    }
+				  }
+				}
+
+		annotation GroupingDesignState = {"Version":0,"Sources":[{"Name":"d","Entity":"dim_billing"}],"GroupedColumns":[{"Column":{"Expression":{"SourceRef":{"Source":"d"}},"Property":"Monthly_Charge_USD"}}],"BinItem":{"Expression":{"Floor":{"Expression":{"Column":{"Expression":{"SourceRef":{"Source":"d"}},"Property":"Monthly_Charge_USD"}},"Size":20.0}}}}
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column Contract_Short =
+			
+			SWITCH(
+			    dim_billing[Contract_Type],
+			    "Month-to-month", "MTM",
+			    "One year",       "1Y",
+			    "Two year",       "2Y"
+			)
+		lineageTag: 971a7809-efae-4a25-8f45-74f1cf59e7f6
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Removes '(automatic)' text from payment methods and converts them to lowercase. Leaves other payment methods unchanged.
+	column Payment_Method_Cleaned =
+			VAR Original = dim_billing[Payment_Method]
+			VAR HasAutomatic = IF(SEARCH("(automatic)", Original, , 0) > 0, TRUE, FALSE)
+			
+			RETURN
+			    IF(
+			        HasAutomatic,
+			        LOWER(TRIM(SUBSTITUTE(Original, " (automatic)", ""))),
+			        Original
+			    )
+		dataType: string
+		lineageTag: c5e82c79-0b99-46f8-9339-da8fda5f351c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Uses Paper Billing Updated' = ```
+			
+			    IF( dim_billing[Uses_Paperless_Billing] = 0, "Traditional" & UNICHAR(10) & " Billing", "Paperless " & UNICHAR(10) & " Billing")
+			```
+		lineageTag: b282ccd5-865d-40ab-a17f-d67a08af5c1c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Monthly charge band categorization in $20 increments from $0-120+
+	column 'Charge Band Monthly' =
+			VAR ChargeAmount = dim_billing[Monthly_Charge_USD]
+			
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        ChargeAmount >= 0 && ChargeAmount <= 20, "$0-$20",
+			        ChargeAmount > 20 && ChargeAmount <= 40, "$21-$40",
+			        ChargeAmount > 40 && ChargeAmount <= 60, "$41-$60",
+			        ChargeAmount > 60 && ChargeAmount <= 80, "$61-$80",
+			        ChargeAmount > 80 && ChargeAmount <= 100, "$81-$100",
+			        ChargeAmount > 100 && ChargeAmount <= 120, "$101-$120",
+			        "$120+"
+			    )
+		dataType: string
+		lineageTag: 98b02223-423e-4aca-9ded-b2beae00f179
+		summarizeBy: none
+		sortByColumn: 'Charge Band Sort Column'
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Charge Band Sort Column' = ```
+			
+			
+			VAR ChargeAmount = dim_billing[Monthly_Charge_USD]
+			
+			RETURN
+			    SWITCH(
+			        TRUE(),
+			        ChargeAmount >= 0 && ChargeAmount <= 20, 1,
+			        ChargeAmount > 20 && ChargeAmount <= 40, 2,
+			        ChargeAmount > 40 && ChargeAmount <= 60, 3,
+			        ChargeAmount > 60 && ChargeAmount <= 80, 4,
+			        ChargeAmount > 80 && ChargeAmount <= 100, 5,
+			        ChargeAmount > 100 && ChargeAmount <= 120, 6,
+			        7
+			    )
+			
+			```
+		formatString: 0
+		lineageTag: 02d856a9-c28c-4381-9ffe-1524faabf275
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_billing = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\USER\Downloads\NexaLink_Churn_PowerBI.xlsx"), null, true),
+				    dim_billing_Sheet = Source{[Item="dim_billing",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(dim_billing_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Customer_ID", type text}, {"Contract_Type", type text}, {"Uses_Paperless_Billing", type text}, {"Payment_Method", type text}, {"Monthly_Charge_USD", type number}, {"Total_Charge_USD", type number}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Changed Type","Yes","1",Replacer.ReplaceText,{"Uses_Paperless_Billing"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","No","0",Replacer.ReplaceText,{"Uses_Paperless_Billing"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Replaced Value1",{{"Uses_Paperless_Billing", Int64.Type}, {"Monthly_Charge_USD", Currency.Type}, {"Total_Charge_USD", Currency.Type}}),
+				    #"Capitalized Each Word" = Table.TransformColumns(#"Changed Type1",{{"Payment_Method", Text.Proper, type text}}),
+				    #"Capitalized Each Word1" = Table.TransformColumns(#"Capitalized Each Word",{{"Payment_Method", Text.Proper, type text}}),
+				    #"Replaced Value2" = Table.ReplaceValue(#"Capitalized Each Word1","(Automatic)","",Replacer.ReplaceText,{"Customer_ID"}),
+				    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2","(Automatic)","",Replacer.ReplaceText,{"Payment_Method"})
+				in
+				    #"Replaced Value3"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

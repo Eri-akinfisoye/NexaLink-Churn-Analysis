@@ -1,0 +1,44 @@
+table dim_support
+	lineageTag: 4e984c31-7604-441f-b8cb-312972208aea
+
+	column Customer_ID
+		dataType: string
+		lineageTag: 7978d52b-58bb-472a-a0c2-b3a74355cc6a
+		summarizeBy: none
+		sourceColumn: Customer_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Admin_Tickets_Count
+		dataType: int64
+		formatString: 0
+		lineageTag: 14fae7a2-65d7-440b-aa4d-2f3c58cd89ae
+		summarizeBy: sum
+		sourceColumn: Admin_Tickets_Count
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tech_Tickets_Count
+		dataType: int64
+		formatString: 0
+		lineageTag: f0183137-b668-41d8-9e04-d735ee6b7ebc
+		summarizeBy: sum
+		sourceColumn: Tech_Tickets_Count
+
+		annotation SummarizationSetBy = Automatic
+
+	partition dim_support = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\USER\Downloads\NexaLink_Churn_PowerBI.xlsx"), null, true),
+				    dim_support_Sheet = Source{[Item="dim_support",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(dim_support_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Customer_ID", type text}, {"Admin_Tickets_Count", Int64.Type}, {"Tech_Tickets_Count", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+

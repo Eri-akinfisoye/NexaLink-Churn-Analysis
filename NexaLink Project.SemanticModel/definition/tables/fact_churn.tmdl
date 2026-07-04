@@ -1,0 +1,142 @@
+table fact_churn
+	lineageTag: 8e7cb070-bdca-418e-964e-6f81493b3d2a
+
+	column Customer_ID
+		dataType: string
+		lineageTag: 68063d15-b385-42b7-9e2d-5d0a753d03ed
+		summarizeBy: none
+		sourceColumn: Customer_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Monthly_Charge_USD
+		dataType: double
+		lineageTag: 76fc2fe3-4377-4c5b-98df-5038641b7342
+		summarizeBy: sum
+		sourceColumn: Monthly_Charge_USD
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Total_Charge_USD
+		dataType: double
+		lineageTag: c06fc908-2948-439e-8090-583b407424c7
+		summarizeBy: sum
+		sourceColumn: Total_Charge_USD
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column Tenure_Months
+		dataType: int64
+		formatString: 0
+		lineageTag: 56d8d60e-c733-46b6-b51b-0ae6c0cd5fcb
+		summarizeBy: sum
+		sourceColumn: Tenure_Months
+
+		annotation SummarizationSetBy = Automatic
+
+	column Admin_Tickets_Count
+		dataType: int64
+		formatString: 0
+		lineageTag: 3a23ed23-bb23-4ade-96dd-ea09cc3b5ce1
+		summarizeBy: sum
+		sourceColumn: Admin_Tickets_Count
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tech_Tickets_Count
+		dataType: int64
+		formatString: 0
+		lineageTag: 5e4fd1ae-61eb-4803-ab39-3b8890b22352
+		summarizeBy: sum
+		sourceColumn: Tech_Tickets_Count
+
+		annotation SummarizationSetBy = Automatic
+
+	column Churned
+		dataType: string
+		lineageTag: 67cafe45-419c-4450-a4ee-07d12edc49a7
+		summarizeBy: none
+		sourceColumn: Churned
+
+		annotation SummarizationSetBy = Automatic
+
+	column Churn_Updated = ```
+			
+			    IF( fact_churn[Churned] = "1", 
+			    "Churned",
+			     "Retained")
+			```
+		lineageTag: e2ecd957-e6fd-459e-b7d0-8c0b85725184
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Charge_Segment =
+			
+			IF(
+			    fact_churn[Monthly_Charge_USD] >= 70.35,
+			    "High Charge",
+			    "Low Charge"
+			)
+		lineageTag: bad69434-7ff4-4c45-aaca-974f809bc6fd
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ticket_Segment =
+			
+			IF(
+			    fact_churn[Tech_Tickets_Count] >= 2,
+			    "High Tickets (2+)",
+			    "Low Tickets (0-1)"
+			)
+		lineageTag: 21dccc4a-651d-45b2-9788-c4746589bec9
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Risk_Segment =
+			
+			fact_churn[Ticket_Segment] & " | " & fact_churn[Charge_Segment]
+		lineageTag: edc3cd6d-8e74-4129-af1e-2e9f89426c43
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tech_Ticket_Segment = ```
+			
+			    SWITCH(
+			        TRUE(),
+			        fact_churn[Tech_Tickets_Count] = 0,                                                    "0 ",
+			        fact_churn[Tech_Tickets_Count] >= 1 && fact_churn[Tech_Tickets_Count] <= 2,            "1-2 ",
+			        fact_churn[Tech_Tickets_Count] >= 3 && fact_churn[Tech_Tickets_Count] <= 4,            "3-4 ",
+			        fact_churn[Tech_Tickets_Count] >= 5 && fact_churn[Tech_Tickets_Count] <= 7,            "5-7 ",
+			        fact_churn[Tech_Tickets_Count] >= 8,                                                   "8+ "
+			    )
+			```
+		lineageTag: bb0e0f85-ead5-446e-9aa7-c4c8e577d86f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition fact_churn = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\USER\Downloads\NexaLink_Churn_PowerBI.xlsx"), null, true),
+				    fact_churn_Sheet = Source{[Item="fact_churn",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(fact_churn_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Customer_ID", type text}, {"Monthly_Charge_USD", type number}, {"Total_Charge_USD", type number}, {"Tenure_Months", Int64.Type}, {"Admin_Tickets_Count", Int64.Type}, {"Tech_Tickets_Count", Int64.Type}, {"Churned", type text}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Changed Type","Yes","1",Replacer.ReplaceText,{"Churned"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","No","0",Replacer.ReplaceText,{"Churned"})
+				in
+				    #"Replaced Value1"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+

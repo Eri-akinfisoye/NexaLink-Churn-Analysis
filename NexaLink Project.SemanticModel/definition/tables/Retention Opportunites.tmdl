@@ -1,0 +1,46 @@
+table 'Retention Opportunites'
+	lineageTag: 872955f4-fbf8-4560-80cc-2ff58a5e93bf
+
+	column 'Retention Opportunities'
+		dataType: string
+		lineageTag: 338be09c-014e-4ccf-a031-8e5391e31c85
+		summarizeBy: none
+		sourceColumn: Retention Opportunities
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column Impact
+		dataType: string
+		lineageTag: bcdc2bcc-1483-49a0-abf5-8821b7533be3
+		summarizeBy: none
+		sourceColumn: Impact
+		sortByColumn: 'Sort Column '
+
+		changedProperty = SortByColumn
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Sort Column '
+		dataType: string
+		lineageTag: 17464faa-aba2-4842-873b-ceedb2129d64
+		summarizeBy: none
+		sourceColumn: "Sort Column "
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Retention Opportunites' = m
+		mode: import
+		source =
+				let
+				    Source = Table.FromRows(Json.Document(Binary.Decompress(Binary.FromText("XY7BSgNBEER/pdiTQoKoX5CsEQ8GQ4iChByamc7usLvdS0+vmr93WAQht3eoelXHY1WrfLE5tireLl2XM6CesuvAluGKV5WGDSXqRsFztag+2C54SU1b+L46LY7VznRQZ6ymUiRPATu6DCyecbMm6XAwknwunjvUxjE5arJ4WwR/nofZs+c4Bcam5+CmUjx1y6HDE48skSXwdWPzM5JEHL51+cn0/xOrqKMnlZLclsFpKPA4V94zl3sjW885Y536PkkDyiDsU+7w3FODsxoOZA07R7xNbkyhvXKdfgE=", BinaryEncoding.Base64), Compression.Deflate)), let _t = ((type nullable text) meta [Serialized.Text = true]) in type table [#"Retention Opportunities" = _t, Impact = _t, #"Sort Column 2" = _t]),
+				    #"Changed Type" = Table.TransformColumnTypes(Source,{{"Retention Opportunities", type text}, {"Impact", type text}}),
+				    #"Renamed Columns" = Table.RenameColumns(#"Changed Type",{{"Sort Column 2", "Sort Column "}})
+				in
+				    #"Renamed Columns"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

@@ -1,0 +1,142 @@
+table dim_customer
+	lineageTag: 308af91b-bc58-484a-b603-f1881731e95f
+
+	column Customer_ID
+		dataType: string
+		lineageTag: 40d76037-b962-45f1-a0ee-a5a17612e7a5
+		summarizeBy: none
+		sourceColumn: Customer_ID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Gender
+		dataType: string
+		lineageTag: b1a0cda3-8e77-4a07-ab7f-088d6e7783ef
+		summarizeBy: none
+		sourceColumn: Gender
+
+		annotation SummarizationSetBy = Automatic
+
+	column Is_Senior_Citizen
+		dataType: string
+		lineageTag: 385971d6-0b4c-4c88-adbd-b35e6de76b24
+		summarizeBy: none
+		sourceColumn: Is_Senior_Citizen
+
+		annotation SummarizationSetBy = Automatic
+
+	column Has_Partner
+		dataType: int64
+		formatString: 0
+		lineageTag: 64a8e1a8-a73d-4e3b-aeb5-dcf45d59c480
+		summarizeBy: sum
+		sourceColumn: Has_Partner
+
+		annotation SummarizationSetBy = Automatic
+
+	column Has_Dependents
+		dataType: int64
+		formatString: 0
+		lineageTag: d2b3a66a-9214-4ac2-b3cf-c09422d59e7b
+		summarizeBy: sum
+		sourceColumn: Has_Dependents
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tenure_Months
+		dataType: int64
+		formatString: 0
+		lineageTag: 2d8b63a3-4677-4d75-9a6a-205b6433ac9e
+		summarizeBy: sum
+		sourceColumn: Tenure_Months
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Categorizes customers as Senior Citizen or Non-senior Citizen based on Is_Senior_Citizen flag
+	column 'Senior Citizen Category' = IF(dim_customer[Is_Senior_Citizen] = "Yes" , "Senior", "Non-senior")
+		dataType: string
+		lineageTag: ea826197-2667-44c9-9464-d97869b1349f
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Tenure_band =
+			
+			SWITCH(
+			    TRUE(),
+			    dim_customer[Tenure_Months] <= 12, "0-12",
+			    dim_customer[Tenure_Months] >=13 && dim_customer[Tenure_Months] <=24 , "13-24",
+			    dim_customer[Tenure_Months] >=25 && dim_customer[Tenure_Months] <=36 , "25-36",
+			    dim_customer[Tenure_Months] >= 37 && dim_customer[Tenure_Months] <= 48 , "37-48",
+			    dim_customer[Tenure_Months] >= 49 && dim_customer[Tenure_Months] <= 60 , "49-60",
+			    dim_customer[Tenure_Months] >= 60 && dim_customer[Tenure_Months] <= 72 , "60-72"
+			
+			)
+		lineageTag: c5e2dc85-138b-4088-99a7-258070c4ceed
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Has_Partner_Update = ```
+			
+			    IF(dim_customer[Has_Partner] = 0, "No", "Yes")
+			```
+		lineageTag: 8dd9a748-d8ae-4b90-b6f9-c7a946137dba
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column Has_Dependants_Updated = ```
+			
+			        IF(
+			            dim_customer[Has_Dependents] = 0, "Without Partners", "With Partners")
+			```
+		lineageTag: fc80fe90-dc9d-4da1-97ee-55ab62e4b499
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Partners & Dependents' = ```
+			
+			
+			    VAR Dependents = IF( dim_customer[Has_Dependents]= 0 , "No Dependents", "Has Dependents")
+			    VAR Partners= IF( dim_customer[Has_Partner]= 0 , "No Partners", "Has Partner")
+			    
+			    RETURN
+			    Dependents & " | " & Partners
+			
+			```
+		lineageTag: 9981e637-0193-43a0-9f23-51526e0d2215
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	/// Categorizes Has_Partner as 'With Partners' or 'Without Partners'
+	column Has_Partner_Updated = IF(dim_customer[Has_Partner] = 0, "Without Partners", "With Partners")
+		dataType: string
+		lineageTag: d05f688f-d1a0-4134-812b-800e1513ca45
+		summarizeBy: none
+
+	partition dim_customer = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\USER\Downloads\NexaLink_Churn_PowerBI.xlsx"), null, true),
+				    dim_customer_Sheet = Source{[Item="dim_customer",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(dim_customer_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"Customer_ID", type text}, {"Gender", type text}, {"Is_Senior_Citizen", type text}, {"Has_Partner", type text}, {"Has_Dependents", type text}, {"Tenure_Months", Int64.Type}}),
+				    #"Replaced Value" = Table.ReplaceValue(#"Changed Type","Yess","1",Replacer.ReplaceText,{"Has_Dependents"}),
+				    #"Replaced Value1" = Table.ReplaceValue(#"Replaced Value","Yes","1",Replacer.ReplaceText,{"Customer_ID"}),
+				    #"Replaced Value2" = Table.ReplaceValue(#"Replaced Value1","Yes","1",Replacer.ReplaceText,{"Is_Senior_Citizen", "Has_Partner", "Has_Dependents"}),
+				    #"Replaced Value3" = Table.ReplaceValue(#"Replaced Value2","No","0",Replacer.ReplaceText,{"Is_Senior_Citizen", "Has_Partner", "Has_Dependents"}),
+				    #"Changed Type1" = Table.TransformColumnTypes(#"Replaced Value3",{{"Is_Senior_Citizen", Int64.Type}, {"Has_Partner", Int64.Type}, {"Has_Dependents", Int64.Type}, {"Tenure_Months", Int64.Type}}),
+				    #"Changed Type2" = Table.TransformColumnTypes(#"Changed Type1",{{"Is_Senior_Citizen", type text}}),
+				    #"Replaced Value4" = Table.ReplaceValue(#"Changed Type2","0","No",Replacer.ReplaceText,{"Is_Senior_Citizen"}),
+				    #"Replaced Value5" = Table.ReplaceValue(#"Replaced Value4","1","Yes",Replacer.ReplaceText,{"Is_Senior_Citizen"})
+				in
+				    #"Replaced Value5"
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Exception
+
