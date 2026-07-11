@@ -41,14 +41,14 @@ Star schema with one fact table and four dimension tables, all joined on `Custom
 
 ![Data Model](Assets/Screenshots/image.png)
 *<!-- Data model diagram — Add a screenshot of the Power BI model view showing the star schema. Upload to assets/screenshots/07_data_model.png -->*
->**Design note on cardinality:** The one-to-one mapping in this model is
-> intentional. The source data was a single wide customer table split into
-> logical subject areas (demographics, billing, services, support) for
-> analytical clarity. Each customer has exactly one row in every table —
-> this is a customer-level snapshot, not a transactional fact table.
-> One-to-one cardinality simplifies cross-filtering and avoids the ambiguous
-> filter propagation risks that bidirectional one-to-many relationships can
-> introduce
+> [!NOTE]
+> The one-to-one cardinality in this model is intentional and correct for this
+> dataset. The source data was a single wide customer table split into logical
+> subject areas (demographics, billing, services, support) for analytical
+> clarity. Each customer has exactly one row in every table. This is not a
+> transactional fact table with repeated measures — it is a customer-level
+> snapshot. One-to-one simplifies the model and avoids the ambiguous filter
+> propagation that one-to-many relationships introduce in bidirectional setups.
 ---
 
 ## Key Findings
