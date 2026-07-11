@@ -180,8 +180,8 @@ The raw dataset was transformed through the following steps:
 ---
 
 ## 4. Analysis Findings
-![Alt text describing the image](Assets/Screenshots/Overview.png)
-
+<!-- overview -->
+<img width="747" height="516" alt="Demographics" src="https://github.com/user-attachments/assets/d830ed60-786f-4113-83ba-5abe3e8f3d0a" />
 ### 4.1 Churn Overview
 
 #### 4.1.1 Aggregate Churn Metrics
@@ -221,7 +221,8 @@ Throughout this report, both **churn rate** (the percentage of a segment that ch
 ---
 
 ### 4.2 Demographics & Churn
-
+<!-- Demographics -->
+<img width="752" height="502" alt="Overview" src="https://github.com/user-attachments/assets/e7f4ec1c-eb14-464f-a726-8993684381d5" />
 #### 4.2.1 Senior Citizen Status
 
 **Question:** Do senior citizens churn at a higher rate than non-senior citizens?
@@ -319,7 +320,8 @@ Across the three demographic variables analysed, a clear and consistent pattern 
 ---
 
 ### 4.3 Tenure & Loyalty
-
+<!-- tenure -->
+<img width="760" height="533" alt="Tenure" src="https://github.com/user-attachments/assets/7f99bf38-bb43-4a12-b102-8e673c3f1d9f" />
 #### 4.3.1 Overall Tenure Comparison
 
 **Question:** How does customer tenure relate to churn likelihood?
@@ -397,6 +399,8 @@ Churn at NexaLink is fundamentally an **early-lifecycle problem**. The churn rat
 
 ### 4.4 Services & Add-ons
 
+<!-- services -->
+<img width="797" height="537" alt="Services" src="https://github.com/user-attachments/assets/fdb56a38-9bd8-4d0e-918a-4eaecd7bf8c7" />
 #### 4.4.1 Internet Service Type
 
 **Question:** Which internet service type has the highest churn rate?
@@ -486,7 +490,8 @@ A clear hierarchy of retention value emerges across NexaLink's product portfolio
 ---
 
 ### 4.5 Contract & Billing
-
+<!-- Contract&billing -->
+<img width="817" height="697" alt="Contract Billing" src="https://github.com/user-attachments/assets/021301a9-3fe1-4624-978f-f99931d4871d" />
 #### 4.5.1 Contract Type
 
 **Question:** How does contract type impact churn?
@@ -594,6 +599,9 @@ The combined analysis reveals that **customer commitment structure** — how a c
 ---
 
 ### 4.6 Charges & Revenue
+<!-- charged&revenue -->
+<img width="817" height="707" alt="Charges revenue" src="https://github.com/user-attachments/assets/1dbebb21-a0d5-42d2-b02c-7e0f2caf8a86" />
+
 
 #### 4.6.1 Revenue Profile: Churned vs. Retained
 
