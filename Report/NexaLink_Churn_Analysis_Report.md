@@ -180,6 +180,7 @@ The raw dataset was transformed through the following steps:
 ---
 
 ## 4. Analysis Findings
+![Alt text describing the image](Assets/Screenshots/Overview.png)
 
 ### 4.1 Churn Overview
 
