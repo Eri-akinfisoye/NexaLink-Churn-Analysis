@@ -692,7 +692,12 @@ Charges and revenue analysis reveals the full financial weight of NexaLink's chu
 ---
 
 ### 4.7 Support Tickets & Customer Experience
-
+> [!NOTE]
+> A dedicated report page was not built for this dimension because the core
+> insight (a single tech ticket triples churn) is best communicated as a single
+> chart. This visual lives on the Overview page as a supporting chart within
+> the executive summary. Not every analytical finding warrants its own page —
+> some are sharp enough to land in one chart on the summary dashboard.
 #### 4.7.1 Tech Support Ticket Volume vs. Churn
 
 **Question:** Do customers who raised more tech support tickets churn more frequently?
