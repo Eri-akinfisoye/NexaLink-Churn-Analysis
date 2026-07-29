@@ -358,7 +358,8 @@ NexaLink-Churn-Analysis/
 
 ## Author
 
-**Akinfisoye Erioluwa** — Data Analyst
+**Akinfisoye Erioluwa** — Data & Business Analytics | Power BI · Excel · DAX · SQL 
+ 
 
 [LinkedIn](https://www.linkedin.com/in/erioluwa-akinfisoye-30533a247/) | [GitHub](https://github.com/Eri-akinfisoye)
 
